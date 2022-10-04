@@ -1,3 +1,4 @@
+from sys import api_version
 from django.shortcuts import render
 from rest_framework import status
 from rest_framework.views import APIView
@@ -6,6 +7,7 @@ from .serializers import RegisterSerializer, UserSerializer, LoginSerializer
 from rest_framework.renderers import TemplateHTMLRenderer
 from django.contrib.auth.models import User
 from post.models import Post
+from rest_framework.permissions import IsAdminUser
 
 class RegisterView(APIView):
 
@@ -75,7 +77,7 @@ class UserView(APIView):
         try:
             users = User.objects.all()
 
-            [print(user.id) for user in users]
+            print(f"\nusers: {', '.join(map(str, [user.id for user in users]))}", end='\n\n')
 
             serializer = UserSerializer(users, many = True)
 
@@ -127,3 +129,11 @@ class UserDetailView(APIView):
                 'message': 'something went wrong'
             }, status = status.HTTP_400_BAD_REQUEST)
 
+class DeleteAccount(APIView):
+    permission_classes = [IsAdminUser]
+
+    def delete(self, request, pk):
+        user = User.objects.get(id = pk)
+        user.delete()
+
+        return Response({"message": "user deleted succesfully"})

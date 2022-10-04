@@ -6,13 +6,14 @@
 
 {% block content %}
 
-<h3>{{ user.username }}'s posts </h3>
+<h2>{{ user.username }}'s posts </h2>
 
-<ul>
-{% for post in posts %}
-    <li><a href="{% url 'post-detail' post.pk %}"> {{ post.title }}</a> - {{ post.author }}<br/>
-    </li>
-{% endfor %}
-</ul>
-
+<h6>
+    <ul>
+    {% for post in posts %}
+        <li><a href="{% url 'post-detail' post.pk %}"> {{ post.title }}</a> - {{ post.author }}<br/>
+        </li>
+    {% endfor %}
+    </ul>
+</h6>
 {% endblock %}

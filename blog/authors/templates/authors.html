@@ -4,13 +4,15 @@
 
 {% block content %}
 
-<h1>Authors</h1>
+<h2>Authors</h2>
 
-<ul>
-{% for user in object_list %}
-    <li><a href="{% url 'author-detail' user.pk %}"> {{ user.username }}</a> - {{ user.first_name }} {{ user.last_name }}<br/>
-    </li>
-{% endfor %}
-</ul>
+<h6>
+    <ul>
+    {% for user in object_list %}
+        <li><a href="{% url 'author-detail' user.pk %}"> {{ user.username }}</a> - {{ user.first_name }} {{ user.last_name }}<br/>
+        </li>
+    {% endfor %}
+    </ul>
+</h6>
 
 {% endblock %}

@@ -4,14 +4,22 @@
 
 {% block content %}
 
-<h1>{{ post.title }}</h1>
+<h2>{{ post.title }}</h2>
 
 by: {{ post.author.first_name }} {{ post.author.last_name }}
+<br>
+<br/>
+
+Likes:  {% for like in likes %}
+            <a href="{% url 'author-detail' like.pk %}"> {{ like.username }}</a>
+        {% endfor %}
+
 <hr>
 <br/>
 {{ post.body }}
 
 <br/><br/>
 <a href="{% url 'home' %}" class="btn btn-secondary">Back</a>
+<br/><br/>
 
 {% endblock %}

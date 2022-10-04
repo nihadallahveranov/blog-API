@@ -6,6 +6,8 @@ from rest_framework import status
 from rest_framework.renderers import TemplateHTMLRenderer
 from rest_framework_simplejwt.authentication import JWTAuthentication
 
+from django.contrib.auth.models import User
+
 from rest_framework.generics import (
     ListAPIView,
 )
@@ -31,7 +33,7 @@ class PostView(APIView):
 
             serializer = PostSerializer(posts, many = True)
 
-            [print(post.id) for post in posts]
+            print(f"\nposts: {', '.join(map(str, [post.id for post in posts]))}", end='\n\n')
 
             return Response({
                 'data': serializer.data,
@@ -91,10 +93,14 @@ class PostDetailView(APIView):
 
             serializer = PostSerializer(post)
 
+            print(f'post likes from detail view: {post.likes}')
+            print(f'post likes time: {post.likes.all()}')
+
             return Response({
                 'data': serializer.data,
                 'post': post,
-                'message': 'posts fetched succesfully'
+                'likes': post.likes.all(),
+                'message': 'posts fetched succesfully',
             }, status = status.HTTP_200_OK)
 
         except Exception as err:
@@ -104,6 +110,8 @@ class PostDetailView(APIView):
                 'data': {},
                 'message': 'something went wrong'
             }, status = status.HTTP_400_BAD_REQUEST)
+
+
 
 class PostDeleteView(APIView):
 
@@ -144,6 +152,58 @@ class PostDeleteView(APIView):
                 'message': 'post deleted succesfully',
                 # 'template_name': 'home.html'
             }, status = status.HTTP_200_OK)
+
+        except Exception as err:
+            print(f'error: {err}')
+
+            return Response({
+                'data': {},
+                'message': 'something went wrong'
+            }, status = status.HTTP_400_BAD_REQUEST)
+
+
+class PostLikesView(APIView):
+
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, pk):
+        try:
+            data = request.data
+
+            post = Post.objects.get(id = pk)
+            post.likes.add(data['id'])
+
+            post.save()
+
+            return Response({
+                'data': {},
+                'message': 'post liked succesfully',
+            }, status = status.HTTP_201_CREATED)
+
+
+        except Exception as err:
+            print(f'error: {err}')
+
+            return Response({
+                'data': {},
+                'message': 'something went wrong'
+            }, status = status.HTTP_400_BAD_REQUEST)
+
+
+    def delete(self, request, pk):
+        try:
+            data = request.data
+
+            post = Post.objects.get(id = pk)
+            post.likes.remove(data['id'])
+
+            post.save()
+
+            return Response({
+                'data': {},
+                'message': 'post unliked succesfully',
+            }, status = status.HTTP_201_CREATED)
+
 
         except Exception as err:
             print(f'error: {err}')

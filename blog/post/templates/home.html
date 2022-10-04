@@ -4,13 +4,15 @@
 
 {% block content %}
 
-<h1>Posts</h1>
+<h2>Posts</h2>
 
-<ul>
-{% for post in object_list %}
-    <li><a href="{% url 'post-detail' post.pk %}"> {{ post.title }}</a> - {{ post.author }}<br/>
-    </li>
-{% endfor %}
-</ul>
+<h6>
+    <ul>
+    {% for post in object_list %}
+        <li><a href="{% url 'post-detail' post.pk %}"> {{ post.title }}</a> - {{ post.author }}<br/>
+        </li>
+    {% endfor %}
+    </ul>
+</h6>
 
 {% endblock %}

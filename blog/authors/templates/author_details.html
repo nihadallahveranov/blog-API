@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% load rest_framework %}
+
+{% block title %} {{ user.username }}'s posts {% endblock %}
+
+{% block content %}
+
+<h3>{{ user.username }}'s posts </h3>
+
+<ul>
+{% for post in posts %}
+    <li><a href="{% url 'post-detail' post.pk %}"> {{ post.title }}</a> - {{ post.author }}<br/>
+    </li>
+{% endfor %}
+</ul>
+
+{% endblock %}

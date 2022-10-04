@@ -20,8 +20,8 @@ from rest_framework.permissions import (
 
 class PostView(APIView):
     
-    renderer_classes = [TemplateHTMLRenderer]
-    template_name = 'home.html'
+    # renderer_classes = [TemplateHTMLRenderer]
+    # template_name = 'home.html'
 
 
     def get(self, request):
@@ -37,7 +37,7 @@ class PostView(APIView):
 
             return Response({
                 'data': serializer.data,
-                'object_list': posts,
+                # 'object_list': posts,
                 'message': 'posts fetched succesfully',
             }, status = status.HTTP_200_OK)
 
@@ -81,9 +81,6 @@ class PostView(APIView):
 
 class PostDetailView(APIView):
 
-    renderer_classes = [TemplateHTMLRenderer]
-    template_name = 'post_details.html'
-
     def get(self, request, pk):
         """
         A method that returns a templated HTML representation of a given a Post.
@@ -98,7 +95,6 @@ class PostDetailView(APIView):
 
             return Response({
                 'data': serializer.data,
-                'post': post,
                 'likes': post.likes.all(),
                 'message': 'posts fetched succesfully',
             }, status = status.HTTP_200_OK)

@@ -1,4 +1,5 @@
 from sys import api_version
+from django.http import JsonResponse
 from django.shortcuts import render
 from rest_framework import status
 from rest_framework.views import APIView
@@ -8,6 +9,7 @@ from rest_framework.renderers import TemplateHTMLRenderer
 from django.contrib.auth.models import User
 from post.models import Post
 from rest_framework.permissions import IsAdminUser
+import json
 
 class RegisterView(APIView):
 
@@ -66,8 +68,8 @@ class LoginView(APIView):
 
 class UserView(APIView):
 
-    renderer_classes = [TemplateHTMLRenderer]
-    template_name = 'authors.html'
+    # renderer_classes = [TemplateHTMLRenderer]
+    # template_name = 'authors.html'
 
 
     def get(self, request):
@@ -83,7 +85,7 @@ class UserView(APIView):
 
             return Response({
                 'data': serializer.data,
-                'object_list': users,
+                # 'object_list': users,
                 'message': 'users fetched succesfully',
             }, status = status.HTTP_200_OK)
 
@@ -99,25 +101,24 @@ class UserView(APIView):
 
 class UserDetailView(APIView):
 
-    renderer_classes = [TemplateHTMLRenderer]
-    template_name = 'author_details.html'
+    # renderer_classes = [TemplateHTMLRenderer]
+    # template_name = 'author_details.html'
 
     def get(self, request, pk):
-        """
-        A method that returns a templated HTML representation of a given a Post.
-        """
         try:
 
-            posts = [post for post in Post.objects.all() if post.author.id == pk]
+            posts = [post.title for post in Post.objects.all() if post.author.id == pk]
 
             user = User.objects.get(id = pk)
 
             serializer = UserSerializer(user)
 
+            print(f'posts: {posts}')
+
             return Response({
                 'data': serializer.data,
-                'posts': posts,
-                'user': user,
+                'posts': json.dumps(posts),
+                # 'user': user,
                 'message': 'posts fetched succesfully'
             }, status = status.HTTP_200_OK)
 

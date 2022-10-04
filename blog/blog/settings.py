@@ -42,6 +42,8 @@ INSTALLED_APPS = [
     'authors',
     'rest_framework.authtoken',
     'rest_framework_simplejwt',
+    'django_celery_beat', 
+    'django_celery_results',
 ]
 
 MIDDLEWARE = [
@@ -135,3 +137,6 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # AUTH_USER_MODEL = 'user.User'
+
+
+BROKER_URL = 'amqp://guest:guest@localhost:5672/'
